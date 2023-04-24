@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Producer.Core;
+using Producer.DTOs;
+using Producer.Entities;
 
 namespace Producer.Controllers
 {
@@ -7,15 +11,24 @@ namespace Producer.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly IMapper _mapper;
+        public UserController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok();
+            List<User> entities = Datas.Users;
+            List<UserToListDto> dtos = _mapper.Map<List<UserToListDto>>(entities);
+            return Ok(dtos);
         }
 
         [HttpPost]
-        public IActionResult Add()
+        public IActionResult Add([FromBody] UserToAddDto dto)
         {
+            User entity = _mapper.Map<User>(dto);
+            Datas.Users.Add(entity);
             return Ok();
         }
 
@@ -23,12 +36,8 @@ namespace Producer.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)
         {
-            return Ok();
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id)
-        {
+            User entity = Datas.Users.SingleOrDefault(m => m.Id == id);
+            Datas.Users.Remove(entity); 
             return Ok();
         }
     }
