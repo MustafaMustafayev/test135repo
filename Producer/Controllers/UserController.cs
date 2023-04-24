@@ -18,5 +18,12 @@ namespace Producer.Controllers
         {
             return Ok();
         }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete([FromRoute] int id)
+        {
+            return Ok();
+        }
     }
 }
