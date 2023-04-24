@@ -25,5 +25,11 @@ namespace Producer.Controllers
         {
             return Ok();
         }
+
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] int id)
+        {
+            return Ok();
+        }
     }
 }
